@@ -1,0 +1,8 @@
+defmodule MDArrayTest do
+  use ExUnit.Case
+  doctest MDArray
+
+  test "greets the world" do
+    assert MDArray.hello() == :world
+  end
+end

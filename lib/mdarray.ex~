@@ -1,0 +1,18 @@
+defmodule MDArray do
+  @moduledoc """
+  Documentation for MDArray.
+  """
+
+  @doc """
+  Hello world.
+
+  ## Examples
+
+      iex> MDArray.hello()
+      :world
+
+  """
+  def hello do
+    :world
+  end
+end
