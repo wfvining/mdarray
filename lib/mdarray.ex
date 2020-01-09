@@ -3,7 +3,7 @@ defmodule MDArray do
   Documentation for MDArray.
   """
 
-  defstruct [:dimensions, :data]
+  defstruct [:dimensions, :data, :indices]
 
   @doc """
   Create an empty array with the given dimensions.
@@ -11,7 +11,8 @@ defmodule MDArray do
   def new(dimensions) do
     %__MODULE__{
       dimensions: dimensions,
-      data: :array.new(hd(dimensions), [default: :undefined])
+      data: :array.new(hd(dimensions), [default: :undefined]),
+      indices: MapSet.new()
     }
   end
 
@@ -50,7 +51,9 @@ defmodule MDArray do
   """
   def put(array, index, value) do
     check_index(array.dimensions, index)
-    %{ array | data: put_internal(array.data, index, value) }
+    %{ array |
+       data: put_internal(array.data, index, value),
+       indices: MapSet.put(array.indices, index) }
   end
 
   defp put_internal(:undefined, index, value) do
@@ -82,5 +85,25 @@ defmodule MDArray do
       current ->
         put(array, index, update_fun.(current, default))
     end
+  end
+
+  @doc """
+  Returns a set containing the indices that have defined entries.
+
+  ## Examples
+
+    iex> MDArray.defined(MDArray.new([2,2,2,2]))
+    #MapSet<[]>
+
+  """
+  def defined(array) do
+    array.indices
+  end
+
+  @doc """
+  Get the number of elements in the array that are not undefined.
+  """
+  def size(array) do
+    MapSet.size(array.indices)
   end
 end

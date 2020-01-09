@@ -99,4 +99,27 @@ defmodule MDArrayTest do
 
     assert MDArray.get(a, [1]) == 2
   end
+
+  test "defined returns only those indices that have been set", context do
+    a = context.array3
+    |> MDArray.put([0, 0, 0], 0)
+    |> MDArray.put([1, 1, 1], 1)
+    |> MDArray.put([2, 2, 2], 2)
+
+    defined = MDArray.defined(a)
+
+    assert defined == MapSet.new([[0, 0, 0], [1, 1, 1], [2, 2, 2]])
+  end
+
+  test "empty array has size 0", context do
+    assert MDArray.size(context.array1) == 0
+    assert MDArray.size(context.array3) == 0
+    assert MDArray.size(context.array5) == 0
+  end
+
+  test "size of the array reflects the number of unique insertions", %{array1: array} do
+    a = MDArray.put(array, [0], :zero) |> MDArray.put([1], :one) |> MDArray.put([0], :three)
+    assert MDArray.size(a) == 2
+  end
+
 end
