@@ -106,4 +106,20 @@ defmodule MDArray do
   def size(array) do
     MapSet.size(array.indices)
   end
+
+  @doc """
+  Get the capacity of the array.
+
+  ## Examples
+
+    iex> MDArray.capacity(MDArray.new([10]))
+    10
+
+    iex> MDArray.capacity(MDArray.new([10, 10, 100]))
+    10000
+
+  """
+  def capacity(%{dimensions: dimensions}) do
+    Enum.reduce(dimensions, fn x, acc -> x * acc end)
+  end
 end
