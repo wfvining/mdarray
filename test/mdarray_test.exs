@@ -122,4 +122,24 @@ defmodule MDArrayTest do
     assert MDArray.size(a) == 2
   end
 
+  test "put_if stores the new value for undefined entries, regardless of the predicate", %{array1: array} do
+    a = MDArray.put_if(array, [2], :new, fn _, _ -> false end)
+    assert MDArray.size(a) == 1
+    assert MDArray.get(a, [2]) == :new
+  end
+
+  test "put_if does not store the new value if the predicate fails", %{array1: array} do
+    a = MDArray.put(array, [4], :old)
+    |> MDArray.put_if([4], :new, fn _, _ -> :false end)
+
+    assert MDArray.get(a, [4]) == :old
+  end
+
+  test "put_if stores the new value if the predicate succeeds", %{array1: array} do
+    a = MDArray.put(array, [2], 0)
+    |> MDArray.put_if([2], 1, fn current, new -> current < new end)
+
+    assert MDArray.get(a, [2]) == 1
+  end
+
 end

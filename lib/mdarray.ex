@@ -88,6 +88,21 @@ defmodule MDArray do
   end
 
   @doc """
+  Add `new` to the array at `index` if `index` is undefined or
+  `predicate.(MDArray.get(array, index), new)` is `true`.
+  """
+  def put_if(array, index, new, predicate) do
+    update(array, index, new,
+      fn current, new ->
+        if predicate.(current, new) do
+          new
+        else
+          current
+        end
+      end)
+  end
+
+  @doc """
   Returns a set containing the indices that have defined entries.
 
   ## Examples
