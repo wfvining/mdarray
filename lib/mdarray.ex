@@ -122,4 +122,19 @@ defmodule MDArray do
   def capacity(%{dimensions: dimensions}) do
     Enum.reduce(dimensions, fn x, acc -> x * acc end)
   end
+
+  @doc """
+  Get the dimensions of the array.
+
+  ## Examples
+
+    iex> MDArray.dimensions(MDArray.new([10]))
+    [10]
+
+    iex> MDArray.dimensions(MDArray.new([5, 4, 3, 2, 1]))
+    [5, 4, 3, 2, 1]
+  """
+  def dimensions(array) do
+    array.dimensions
+  end
 end
